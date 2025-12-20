@@ -46,7 +46,7 @@ label{
   font-size:13px;
   color:#334155;
 }
-input{
+input, select{
   width:100%;
   padding:12px;
   border-radius:10px;
@@ -126,7 +126,7 @@ button:hover{
 
   <div id="output" class="result"></div>
 
-  <button onclick="downloadIDCard()">Download Age ID Card</button>
+  <button onclick="openIDCardForm()">Download Age ID Card</button>
 
   <div class="trust">
     🔒 We do not collect or store any data.<br>
@@ -146,12 +146,14 @@ button:hover{
 
 <script>
 let timer;
+
 function calculateAge(){
   clearInterval(timer);
   const dob=document.getElementById("dob").value;
   const tob=document.getElementById("tob").value;
   if(!dob){alert("Please enter your date of birth");return;}
   const birth=new Date(dob+"T"+tob+":00");
+
   timer=setInterval(()=>{
     const now=new Date();
     let years=now.getFullYear()-birth.getFullYear();
@@ -182,24 +184,43 @@ function calculateAge(){
   },1000);
 }
 
-// Download ID Card
-function downloadIDCard(){
-  const dobVal=document.getElementById("dob").value;
-  if(!dobVal){alert("Please enter DOB first"); return;}
-
+// Open form for Name + Gender
+function openIDCardForm(){
+  if(!document.getElementById("dob").value){
+    return alert("Please enter your DOB first.");
+  }
   const name = prompt("Enter Name for ID Card");
-  const gender = prompt("Enter Gender (male/female)");
-  if(!name || !gender) return;
+  if(!name) return;
 
+  const genderOptions = ["Male","Female","Alien"];
+  let gender = prompt("Select Gender: Male / Female / Alien").trim();
+  while(!genderOptions.includes(gender)){
+    gender = prompt("Invalid option. Please type: Male / Female / Alien").trim();
+  }
+
+  downloadIDCard(name, gender);
+}
+
+function downloadIDCard(name, gender){
   document.getElementById("cardName").innerText=name;
-  document.getElementById("cardDob").innerText="DOB: "+dobVal;
+  document.getElementById("cardDob").innerText="DOB: "+document.getElementById("dob").value;
 
-  const ageText=document.getElementById("output").innerText.split("\n")[0];
-  document.getElementById("cardAge").innerText=ageText;
+  // Get age text from output
+  const ageText = document.getElementById("output").innerText.split("\n")[0];
+  document.getElementById("cardAge").innerText = ageText;
 
-  document.getElementById("profilePic").src = gender.toLowerCase()==="male" ? "male_icon.png" : "female_icon.png";
+  // Set profile picture
+  let pic="";
+  if(gender==="Male") pic="male_icon.png";
+  else if(gender==="Female") pic="female_icon.png";
+  else pic="alien_icon.png"; // alien image you should add
+
+  document.getElementById("profilePic").src=pic;
+
+  // Show card
   document.getElementById("idCard").style.display="block";
 
+  // Download as PNG
   html2canvas(document.getElementById("idCard")).then(canvas=>{
     const link=document.createElement("a");
     link.download="Age_ID_Card.png";
