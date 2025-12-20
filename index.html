@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -7,158 +7,105 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Poppins:wght@600&display=swap" rel="stylesheet">
 <link rel="icon" href="favicon.png" type="image/png">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0a3d62">
 
-<!-- html2canvas for downloading cards -->
+<!-- html2canvas for downloading ID card -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
-:root {
-  --bg-light: linear-gradient(135deg, #c3ecf9, #e0f7fa);
-  --bg-dark: linear-gradient(135deg, #1e1e1e, #2b2b2b);
-  --text-light: #1b1b1b;
-  --text-dark: #f5f5f5;
+body{
+  font-family:'Roboto', sans-serif;
+  background:#eef2f3;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:50px 15px;
 }
 
-* { box-sizing: border-box; margin:0; padding:0; }
-
-body {
-  font-family: 'Roboto', sans-serif;
-  background: var(--bg-light);
-  color: var(--text-light);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  padding: 50px 15px;
-  transition: background 0.5s, color 0.5s;
+h1{
+  font-family:'Poppins', sans-serif;
+  font-size:2.5em;
+  margin-bottom:20px;
+  color:#0a3d62;
 }
 
-body.dark-mode {
-  background: var(--bg-dark);
-  color: var(--text-dark);
-}
-
-h1 {
-  font-family: 'Poppins', sans-serif;
-  font-size: 2.8em;
-  text-align: center;
-  margin-bottom: 30px;
-  color: #0a3d62;
-}
-
-.input-card {
-  background: rgba(255,255,255,0.25);
-  backdrop-filter: blur(15px);
-  border-radius: 25px;
-  padding: 35px 40px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-  max-width: 400px;
-  width: 100%;
-  transition: background 0.5s;
-}
-
-body.dark-mode .input-card { background: rgba(50,50,50,0.35); }
-
-input {
-  width: 100%;
-  padding: 14px 18px;
-  border-radius: 12px;
-  border: 2px solid #0a3d62;
-  font-size: 1em;
-  background: rgba(255,255,255,0.2);
-  color: inherit;
-  transition: 0.3s;
-}
-
-input:focus {
-  outline: none;
-  border-color: #ff6f61;
-  background: rgba(255,255,255,0.3);
-}
-
-.buttons {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 100%;
-}
-
-button {
-  padding: 12px 20px;
-  border-radius: 20px;
-  border: none;
-  font-weight: 700;
-  cursor: pointer;
-  transition: 0.4s;
-}
-
-button:first-child {
-  background: linear-gradient(45deg,#0a3d62,#09509e);
-  color:white;
-}
-button:first-child:hover { background: linear-gradient(45deg,#09509e,#0a3d62); }
-
-#darkModeToggle {
-  background: linear-gradient(45deg,#ff6f61,#e55a4f);
-  color:white;
-}
-#darkModeToggle:hover { background: linear-gradient(45deg,#e55a4f,#ff6f61); }
-
-.result-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(140px,1fr));
-  gap:20px;
-  margin-top:50px;
-  width:100%;
-  max-width:900px;
-}
-
-.card {
-  backdrop-filter: blur(12px);
+.input-card{
+  background:#fff;
+  padding:25px 30px;
   border-radius:20px;
-  padding:20px;
-  text-align:center;
-  box-shadow:0 10px 25px rgba(0,0,0,0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
-  color:white;
-  font-family:'Poppins',sans-serif;
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:15px;
+  width:100%;
+  max-width:400px;
 }
 
-.card:hover { transform: translateY(-7px); box-shadow:0 15px 30px rgba(0,0,0,0.2); }
+input, select{
+  padding:12px 15px;
+  border-radius:10px;
+  border:2px solid #0a3d62;
+  font-size:1em;
+  width:100%;
+}
 
-.card h3 { margin-bottom:10px; font-size:1.1em; }
-.card p { font-size:1.5em; font-weight:700; margin-top:5px; }
+button{
+  padding:10px 20px;
+  border:none;
+  border-radius:15px;
+  background:#0a3d62;
+  color:white;
+  cursor:pointer;
+  font-weight:700;
+}
 
-.card-years { background: linear-gradient(135deg,#0a3d62,#09509e); }
-.card-months { background: linear-gradient(135deg,#6a0dad,#a29bfe); }
-.card-weeks { background: linear-gradient(135deg,#008080,#20c997); }
-.card-days { background: linear-gradient(135deg,#ff6f61,#ffa500); }
-.card-hours { background: linear-gradient(135deg,#2ecc71,#27ae60); }
-.card-minutes { background: linear-gradient(135deg,#e84393,#fd79a8); }
-.card-seconds { background: linear-gradient(135deg,#e74c3c,#ff4757); }
+button:hover{ background:#09509e; }
 
-@media(min-width:600px){ input{ width:100%; } }
+#result{
+  margin-top:30px;
+  background:#fff;
+  padding:25px;
+  border-radius:20px;
+  max-width:600px;
+  width:100%;
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
+  font-size:1.2em;
+  line-height:1.8em;
+  color:#0a3d62;
+  white-space:pre-wrap;
+  text-align:center;
+}
 
 /* ID Card style */
-#idCard {
+#idCard{
   display:none;
   width:400px;
+  max-width:90%;
   padding:30px;
   border-radius:20px;
   background:linear-gradient(135deg,#0a3d62,#09509e);
   color:white;
   text-align:center;
   font-family:'Poppins',sans-serif;
+  line-height:1.8em;
 }
-#idCard h2 { margin-bottom:20px; }
-#idCard p { margin:5px 0; font-size:1.2em; font-weight:600; }
+
+#idCard h2{ margin-bottom:15px; }
+#idCard p{ margin:3px 0; font-size:1.1em; font-weight:600; }
+
+#profileContainer{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  margin-bottom:15px;
+}
+
+#profilePic{
+  width:80px;
+  height:80px;
+  border-radius:50%;
+  background:white;
+}
 </style>
 </head>
 <body>
@@ -166,134 +113,120 @@ button:first-child:hover { background: linear-gradient(45deg,#09509e,#0a3d62); }
 <h1>Smart Age Calculator</h1>
 
 <div class="input-card">
-  <input type="datetime-local" id="dob" placeholder="Select your date and time of birth">
-  <div class="buttons">
+  <input type="text" id="userName" placeholder="Enter your name">
+  <select id="gender">
+    <option value="male">Male</option>
+    <option value="female">Female</option>
+  </select>
+  <input type="datetime-local" id="dob" placeholder="Select your birth date and time">
+  <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
     <button onclick="calculateAge()">Show My Age</button>
-    <button onclick="downloadIDCard()">Download ID Card</button>
-    <button id="darkModeToggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    <button onclick="downloadIDCard()">Download Age ID Card</button>
   </div>
 </div>
 
-<div class="result-container" id="result"></div>
+<div id="result"></div>
 
-<!-- Hidden ID Card for download -->
+<!-- Hidden ID Card -->
 <div id="idCard">
-  <h2>My Age Card</h2>
-  <p id="idYears"></p>
-  <p id="idMonths"></p>
-  <p id="idWeeks"></p>
-  <p id="idDays"></p>
-  <p id="idHours"></p>
-  <p id="idMinutes"></p>
-  <p id="idSeconds"></p>
+  <div id="profileContainer">
+    <img id="profilePic" src="">
+    <div>
+      <h2 id="cardName">Your Name</h2>
+      <p id="cardGender">Gender</p>
+    </div>
+  </div>
+  <hr style="margin:10px 0;border:1px solid rgba(255,255,255,0.3);">
+  <p id="cardAge"></p>
+  <p id="cardMonths"></p>
+  <p id="cardWeeks"></p>
+  <p id="cardDays"></p>
+  <p id="cardHours"></p>
+  <p id="cardMinutes"></p>
+  <p id="cardSeconds"></p>
 </div>
 
 <script>
-let timer;
-
-function toggleDarkMode(){ document.body.classList.toggle('dark-mode'); }
-
-function animateNumber(element, newValue){
-  const current = parseInt(element.innerText) || 0;
-  const diff = newValue - current;
-  if(diff===0) return;
-  const step = Math.max(1, Math.floor(Math.abs(diff)/10));
-  let counter = current;
-  const increment = diff>0 ? step : -step;
-  const anim = setInterval(()=>{
-    counter += increment;
-    if((increment>0 && counter>=newValue) || (increment<0 && counter<=newValue)){
-      counter=newValue; clearInterval(anim);
-    }
-    element.innerText = counter;
-  },30);
-}
+let years, months, days, totalMonths, totalDays, totalWeeks, totalHours, totalMinutes, totalSeconds;
 
 function calculateAge(){
-  const dobInput=document.getElementById('dob').value;
-  if(!dobInput){ alert("Enter date and time"); return; }
-  const dob=new Date(dobInput);
-  if(dob>new Date()){ alert("You are not born yet!"); return; }
-  if(timer) clearInterval(timer);
+  const dobInput = document.getElementById('dob').value;
+  if(!dobInput){ alert("Please enter your date of birth!"); return; }
 
-  const resultContainer=document.getElementById('result');
-  if(!resultContainer.innerHTML){
-    resultContainer.innerHTML=`
-      <div class="card card-years"><h3>⏳ Years</h3><p>0</p></div>
-      <div class="card card-months"><h3>📆 Months</h3><p>0</p></div>
-      <div class="card card-weeks"><h3>📅 Weeks</h3><p>0</p></div>
-      <div class="card card-days"><h3>☀️ Days</h3><p>0</p></div>
-      <div class="card card-hours"><h3>⏰ Hours</h3><p>0</p></div>
-      <div class="card card-minutes"><h3>🕒 Minutes</h3><p>0</p></div>
-      <div class="card card-seconds"><h3>⏱️ Seconds</h3><p>0</p></div>
-    `;
+  const dob = new Date(dobInput);
+  const now = new Date();
+  if(dob>now){ alert("You are not born yet!"); return; }
+
+  const diffMs = now - dob;
+
+  totalSeconds = Math.floor(diffMs/1000);
+  totalMinutes = Math.floor(totalSeconds/60);
+  totalHours = Math.floor(totalMinutes/60);
+  totalDays = Math.floor(totalHours/24);
+  totalWeeks = Math.floor(totalDays/7);
+
+  years = now.getFullYear() - dob.getFullYear();
+  months = now.getMonth() - dob.getMonth();
+  days = now.getDate() - dob.getDate();
+
+  if(days<0){
+    const lastMonth = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+    days += lastMonth;
+    months--;
   }
 
-  const yearsEl=resultContainer.children[0].querySelector("p");
-  const monthsEl=resultContainer.children[1].querySelector("p");
-  const weeksEl=resultContainer.children[2].querySelector("p");
-  const daysEl=resultContainer.children[3].querySelector("p");
-  const hoursEl=resultContainer.children[4].querySelector("p");
-  const minutesEl=resultContainer.children[5].querySelector("p");
-  const secondsEl=resultContainer.children[6].querySelector("p");
-
-  const idYears=document.getElementById('idYears');
-  const idMonths=document.getElementById('idMonths');
-  const idWeeks=document.getElementById('idWeeks');
-  const idDays=document.getElementById('idDays');
-  const idHours=document.getElementById('idHours');
-  const idMinutes=document.getElementById('idMinutes');
-  const idSeconds=document.getElementById('idSeconds');
-
-  function updateAge(){
-    const now=new Date();
-    const diffMs=now-dob;
-
-    const totalSeconds=Math.floor(diffMs/1000);
-    const totalMinutes=Math.floor(totalSeconds/60);
-    const totalHours=Math.floor(totalMinutes/60);
-    const totalDays=Math.floor(totalHours/24);
-    const totalWeeks=Math.floor(totalDays/7);
-
-    let years=now.getFullYear()-dob.getFullYear();
-    let months=now.getMonth()-dob.getMonth()+years*12;
-    if(now.getDate()<dob.getDate()){ months--; years--; }
-
-    animateNumber(yearsEl,years);
-    animateNumber(monthsEl,months);
-    animateNumber(weeksEl,totalWeeks);
-    animateNumber(daysEl,totalDays);
-    animateNumber(hoursEl,totalHours);
-    animateNumber(minutesEl,totalMinutes);
-    animateNumber(secondsEl,totalSeconds);
-
-    // update ID card
-    idYears.innerText=`⏳ Years: ${years}`;
-    idMonths.innerText=`📆 Months: ${months}`;
-    idWeeks.innerText=`📅 Weeks: ${totalWeeks}`;
-    idDays.innerText=`☀️ Days: ${totalDays}`;
-    idHours.innerText=`⏰ Hours: ${totalHours}`;
-    idMinutes.innerText=`🕒 Minutes: ${totalMinutes}`;
-    idSeconds.innerText=`⏱️ Seconds: ${totalSeconds}`;
+  if(months<0){
+    months += 12;
+    years--;
   }
 
-  updateAge();
-  timer=setInterval(updateAge,1000);
+  totalMonths = years*12 + months;
+
+  // Display age result
+  document.getElementById('result').innerText = 
+`${years} years ${months} months ${days} days
+or ${totalMonths} months ${days} days
+or ${totalWeeks} weeks ${totalDays % 7} days
+or ${totalDays.toLocaleString()} days
+or ${totalHours.toLocaleString()} hours
+or ${totalMinutes.toLocaleString()} minutes
+or ${totalSeconds.toLocaleString()} seconds`;
+
+  // Name and gender
+  const name = document.getElementById('userName').value || "Your Name";
+  const gender = document.getElementById('gender').value;
+  document.getElementById('cardName').innerText = name;
+  document.getElementById('cardGender').innerText = gender.charAt(0).toUpperCase() + gender.slice(1);
+
+  // Profile picture
+  const profilePic = document.getElementById('profilePic');
+  if(gender==="male"){
+    profilePic.src="male_icon.png";
+  } else {
+    profilePic.src="female_icon.png";
+  }
+
+  // Update ID card age details
+  document.getElementById('cardAge').innerText = `${years} years ${months} months ${days} days`;
+  document.getElementById('cardMonths').innerText = `or ${totalMonths} months ${days} days`;
+  document.getElementById('cardWeeks').innerText = `or ${totalWeeks} weeks ${totalDays % 7} days`;
+  document.getElementById('cardDays').innerText = `or ${totalDays.toLocaleString()} days`;
+  document.getElementById('cardHours').innerText = `or ${totalHours.toLocaleString()} hours`;
+  document.getElementById('cardMinutes').innerText = `or ${totalMinutes.toLocaleString()} minutes`;
+  document.getElementById('cardSeconds').innerText = `or ${totalSeconds.toLocaleString()} seconds`;
 }
 
 function downloadIDCard(){
-  const idCard=document.getElementById('idCard');
-  idCard.style.display='block';
-  html2canvas(idCard).then(canvas=>{
-    const link=document.createElement('a');
-    link.download='Age_ID_Card.png';
-    link.href=canvas.toDataURL();
+  const card = document.getElementById('idCard');
+  card.style.display='block';
+  html2canvas(card).then(canvas=>{
+    const link = document.createElement('a');
+    link.download = 'Age_ID_Card.png';
+    link.href = canvas.toDataURL();
     link.click();
-    idCard.style.display='none';
+    card.style.display='none';
   });
 }
-
-document.getElementById('dob').addEventListener('change',calculateAge);
 </script>
 
 </body>
