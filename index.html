@@ -66,10 +66,11 @@ button{
   cursor:pointer;
   transition:.3s;
   margin-top:8px;
+  position:relative;
 }
 button:hover{
   transform:translateY(-2px);
-  box-shadow:0 10px 25px rgba(14,165,233,.4);
+  box-shadow:0 0 15px #0ea5e9,0 0 30px #2563eb;
 }
 .result{
   margin-top:18px;
@@ -95,12 +96,14 @@ button:hover{
   color:white;
   text-align:center;
   margin:15px auto;
+  box-shadow:0 0 20px #0ea5e9,0 0 40px #2563eb;
 }
 .profile{
   width:90px;
   height:90px;
   border-radius:50%;
   margin:10px auto;
+  border:2px solid #fff;
 }
 .id-header{
   font-weight:700;
@@ -170,7 +173,7 @@ function calculateAge(){
     const remDays=totalDays%7;
     const totalMonths=years*12+months;
     document.getElementById("output").innerHTML=`
-      <div class="id-card">
+      <div class="id-card" style="background:rgba(14,165,233,0.1); color:#0f172a;">
       <b>Age:</b><br><br>
       ${years} years ${months} months ${days} days<br>
       or ${totalMonths} months ${days} days<br>
