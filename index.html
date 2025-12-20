@@ -1,27 +1,24 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Smart Age Calculator</title>
 
-<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Poppins:wght@600&display=swap" rel="stylesheet">
-
-<!-- Favicon -->
 <link rel="icon" href="favicon.png" type="image/png">
 <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a3d62">
+
+<!-- html2canvas for downloading cards -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
 :root {
-  --primary-color: #0a3d62;
-  --accent-color: #ff6f61;
   --bg-light: linear-gradient(135deg, #c3ecf9, #e0f7fa);
   --bg-dark: linear-gradient(135deg, #1e1e1e, #2b2b2b);
   --text-light: #1b1b1b;
   --text-dark: #f5f5f5;
-  --card-light: rgba(255,255,255,0.25);
-  --card-dark: rgba(50,50,50,0.35);
 }
 
 * { box-sizing: border-box; margin:0; padding:0; }
@@ -48,11 +45,11 @@ h1 {
   font-size: 2.8em;
   text-align: center;
   margin-bottom: 30px;
-  color: var(--primary-color);
+  color: #0a3d62;
 }
 
 .input-card {
-  background: var(--card-light);
+  background: rgba(255,255,255,0.25);
   backdrop-filter: blur(15px);
   border-radius: 25px;
   padding: 35px 40px;
@@ -66,35 +63,35 @@ h1 {
   transition: background 0.5s;
 }
 
-body.dark-mode .input-card { background: var(--card-dark); }
+body.dark-mode .input-card { background: rgba(50,50,50,0.35); }
 
-input, select {
+input {
   width: 100%;
   padding: 14px 18px;
   border-radius: 12px;
-  border: 2px solid var(--primary-color);
+  border: 2px solid #0a3d62;
   font-size: 1em;
   background: rgba(255,255,255,0.2);
   color: inherit;
   transition: 0.3s;
 }
 
-input:focus, select:focus {
+input:focus {
   outline: none;
-  border-color: var(--accent-color);
+  border-color: #ff6f61;
   background: rgba(255,255,255,0.3);
 }
 
 .buttons {
   display: flex;
-  gap: 15px;
+  gap: 10px;
   flex-wrap: wrap;
   justify-content: center;
   width: 100%;
 }
 
 button {
-  padding: 14px 25px;
+  padding: 12px 20px;
   border-radius: 20px;
   border: none;
   font-weight: 700;
@@ -124,34 +121,44 @@ button:first-child:hover { background: linear-gradient(45deg,#09509e,#0a3d62); }
 }
 
 .card {
-  background: var(--card-light);
   backdrop-filter: blur(12px);
   border-radius:20px;
   padding:20px;
   text-align:center;
   box-shadow:0 10px 25px rgba(0,0,0,0.1);
-  transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
-}
-
-body.dark-mode .card { background: var(--card-dark); }
-
-.card:hover {
-  transform: translateY(-7px);
-  box-shadow:0 15px 30px rgba(0,0,0,0.2);
-}
-
-.card h3 {
+  transition: transform 0.3s, box-shadow 0.3s;
+  color:white;
   font-family:'Poppins',sans-serif;
-  margin-bottom:10px;
-  color: var(--accent-color);
 }
 
-.card p {
-  font-size:1.5em;
-  font-weight:700;
-}
+.card:hover { transform: translateY(-7px); box-shadow:0 15px 30px rgba(0,0,0,0.2); }
 
-@media(min-width:600px){ input, select{ width:100%; } }
+.card h3 { margin-bottom:10px; font-size:1.1em; }
+.card p { font-size:1.5em; font-weight:700; margin-top:5px; }
+
+.card-years { background: linear-gradient(135deg,#0a3d62,#09509e); }
+.card-months { background: linear-gradient(135deg,#6a0dad,#a29bfe); }
+.card-weeks { background: linear-gradient(135deg,#008080,#20c997); }
+.card-days { background: linear-gradient(135deg,#ff6f61,#ffa500); }
+.card-hours { background: linear-gradient(135deg,#2ecc71,#27ae60); }
+.card-minutes { background: linear-gradient(135deg,#e84393,#fd79a8); }
+.card-seconds { background: linear-gradient(135deg,#e74c3c,#ff4757); }
+
+@media(min-width:600px){ input{ width:100%; } }
+
+/* ID Card style */
+#idCard {
+  display:none;
+  width:400px;
+  padding:30px;
+  border-radius:20px;
+  background:linear-gradient(135deg,#0a3d62,#09509e);
+  color:white;
+  text-align:center;
+  font-family:'Poppins',sans-serif;
+}
+#idCard h2 { margin-bottom:20px; }
+#idCard p { margin:5px 0; font-size:1.2em; font-weight:600; }
 </style>
 </head>
 <body>
@@ -160,75 +167,133 @@ body.dark-mode .card { background: var(--card-dark); }
 
 <div class="input-card">
   <input type="datetime-local" id="dob" placeholder="Select your date and time of birth">
-  <select id="fun">
-    <option value="human">Human Age</option>
-    <option value="dog">Dog Age 🐶</option>
-    <option value="cat">Cat Age 🐱</option>
-    <option value="plant">Plant Age 🌱</option>
-  </select>
   <div class="buttons">
     <button onclick="calculateAge()">Show My Age</button>
+    <button onclick="downloadIDCard()">Download ID Card</button>
     <button id="darkModeToggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
   </div>
 </div>
 
 <div class="result-container" id="result"></div>
 
+<!-- Hidden ID Card for download -->
+<div id="idCard">
+  <h2>My Age Card</h2>
+  <p id="idYears"></p>
+  <p id="idMonths"></p>
+  <p id="idWeeks"></p>
+  <p id="idDays"></p>
+  <p id="idHours"></p>
+  <p id="idMinutes"></p>
+  <p id="idSeconds"></p>
+</div>
+
 <script>
 let timer;
-function toggleDarkMode(){document.body.classList.toggle('dark-mode');}
 
-function calculateAge() {
-  const dobInput = document.getElementById('dob').value;
-  if (!dobInput) { alert("Enter date and time"); return; }
-  const dob = new Date(dobInput);
-  if (dob > new Date()) { alert("You are not born yet!"); return; }
+function toggleDarkMode(){ document.body.classList.toggle('dark-mode'); }
+
+function animateNumber(element, newValue){
+  const current = parseInt(element.innerText) || 0;
+  const diff = newValue - current;
+  if(diff===0) return;
+  const step = Math.max(1, Math.floor(Math.abs(diff)/10));
+  let counter = current;
+  const increment = diff>0 ? step : -step;
+  const anim = setInterval(()=>{
+    counter += increment;
+    if((increment>0 && counter>=newValue) || (increment<0 && counter<=newValue)){
+      counter=newValue; clearInterval(anim);
+    }
+    element.innerText = counter;
+  },30);
+}
+
+function calculateAge(){
+  const dobInput=document.getElementById('dob').value;
+  if(!dobInput){ alert("Enter date and time"); return; }
+  const dob=new Date(dobInput);
+  if(dob>new Date()){ alert("You are not born yet!"); return; }
   if(timer) clearInterval(timer);
 
-  function updateAge() {
-    const now = new Date();
-    const diffMs = now - dob;
-
-    const totalSeconds = Math.floor(diffMs / 1000);
-    const totalMinutes = Math.floor(diffMs / 60 / 1000);
-    const totalHours = Math.floor(totalMinutes / 60);
-    const totalDays = Math.floor(totalHours / 24);
-    const totalWeeks = Math.floor(totalDays / 7);
-
-    let years = now.getFullYear() - dob.getFullYear();
-    let months = now.getMonth() - dob.getMonth() + years*12;
-    if (now.getDate() < dob.getDate()) { months--; years--; }
-
-    const funOption = document.getElementById('fun').value;
-    let funResult="";
-    if(funOption==="dog") funResult=`${(years*7 + (months%12)*0.58).toFixed(1)} yrs 🐶`;
-    else if(funOption==="cat") funResult=`${(years*6 + (months%12)*0.5).toFixed(1)} yrs 🐱`;
-    else if(funOption==="plant") funResult=`${(years*2 + (months%12)*0.17).toFixed(1)} yrs 🌱`;
-    else funResult=`${years} yrs`;
-
-    const jupiterYears=(totalDays/4332.59).toFixed(2);
-    const fantasyAge=(totalDays/365*42).toFixed(0);
-
-    document.getElementById('result').innerHTML=`
-      <div class="card"><h3>Fun Age</h3><p>${funResult}</p></div>
-      <div class="card"><h3>Years</h3><p>${years}</p></div>
-      <div class="card"><h3>Months</h3><p>${months}</p></div>
-      <div class="card"><h3>Weeks</h3><p>${totalWeeks}</p></div>
-      <div class="card"><h3>Days</h3><p>${totalDays}</p></div>
-      <div class="card"><h3>Hours</h3><p>${totalHours}</p></div>
-      <div class="card"><h3>Minutes</h3><p>${totalMinutes}</p></div>
-      <div class="card"><h3>Seconds</h3><p>${totalSeconds}</p></div>
-      <div class="card"><h3>Jupiter Years</h3><p>${jupiterYears}</p></div>
-      <div class="card"><h3>Fantasy Age</h3><p>${fantasyAge}</p></div>
+  const resultContainer=document.getElementById('result');
+  if(!resultContainer.innerHTML){
+    resultContainer.innerHTML=`
+      <div class="card card-years"><h3>⏳ Years</h3><p>0</p></div>
+      <div class="card card-months"><h3>📆 Months</h3><p>0</p></div>
+      <div class="card card-weeks"><h3>📅 Weeks</h3><p>0</p></div>
+      <div class="card card-days"><h3>☀️ Days</h3><p>0</p></div>
+      <div class="card card-hours"><h3>⏰ Hours</h3><p>0</p></div>
+      <div class="card card-minutes"><h3>🕒 Minutes</h3><p>0</p></div>
+      <div class="card card-seconds"><h3>⏱️ Seconds</h3><p>0</p></div>
     `;
+  }
+
+  const yearsEl=resultContainer.children[0].querySelector("p");
+  const monthsEl=resultContainer.children[1].querySelector("p");
+  const weeksEl=resultContainer.children[2].querySelector("p");
+  const daysEl=resultContainer.children[3].querySelector("p");
+  const hoursEl=resultContainer.children[4].querySelector("p");
+  const minutesEl=resultContainer.children[5].querySelector("p");
+  const secondsEl=resultContainer.children[6].querySelector("p");
+
+  const idYears=document.getElementById('idYears');
+  const idMonths=document.getElementById('idMonths');
+  const idWeeks=document.getElementById('idWeeks');
+  const idDays=document.getElementById('idDays');
+  const idHours=document.getElementById('idHours');
+  const idMinutes=document.getElementById('idMinutes');
+  const idSeconds=document.getElementById('idSeconds');
+
+  function updateAge(){
+    const now=new Date();
+    const diffMs=now-dob;
+
+    const totalSeconds=Math.floor(diffMs/1000);
+    const totalMinutes=Math.floor(totalSeconds/60);
+    const totalHours=Math.floor(totalMinutes/60);
+    const totalDays=Math.floor(totalHours/24);
+    const totalWeeks=Math.floor(totalDays/7);
+
+    let years=now.getFullYear()-dob.getFullYear();
+    let months=now.getMonth()-dob.getMonth()+years*12;
+    if(now.getDate()<dob.getDate()){ months--; years--; }
+
+    animateNumber(yearsEl,years);
+    animateNumber(monthsEl,months);
+    animateNumber(weeksEl,totalWeeks);
+    animateNumber(daysEl,totalDays);
+    animateNumber(hoursEl,totalHours);
+    animateNumber(minutesEl,totalMinutes);
+    animateNumber(secondsEl,totalSeconds);
+
+    // update ID card
+    idYears.innerText=`⏳ Years: ${years}`;
+    idMonths.innerText=`📆 Months: ${months}`;
+    idWeeks.innerText=`📅 Weeks: ${totalWeeks}`;
+    idDays.innerText=`☀️ Days: ${totalDays}`;
+    idHours.innerText=`⏰ Hours: ${totalHours}`;
+    idMinutes.innerText=`🕒 Minutes: ${totalMinutes}`;
+    idSeconds.innerText=`⏱️ Seconds: ${totalSeconds}`;
   }
 
   updateAge();
   timer=setInterval(updateAge,1000);
 }
 
-document.getElementById('dob').addEventListener('change', calculateAge);
-document.getElementById('fun').addEventListener('change', calculateAge);
+function downloadIDCard(){
+  const idCard=document.getElementById('idCard');
+  idCard.style.display='block';
+  html2canvas(idCard).then(canvas=>{
+    const link=document.createElement('a');
+    link.download='Age_ID_Card.png';
+    link.href=canvas.toDataURL();
+    link.click();
+    idCard.style.display='none';
+  });
+}
+
+document.getElementById('dob').addEventListener('change',calculateAge);
 </script>
 
 </body>
