@@ -1,94 +1,249 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ultimate Age Calculator</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 50px;
-      background: #f0f8ff;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Professional Age Calculator</title>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- Favicon -->
+<link rel="icon" href="favicon.png" type="image/png">
+<meta name="theme-color" content="#0a3d62">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Age Calculator">
+<link rel="apple-touch-icon" href="favicon.png">
+
+<!-- Manifest for PWA -->
+<link rel="manifest" href="manifest.json">
+
+<style>
+  :root {
+    --primary-color: #0a3d62;
+    --accent-color: #ff6f61;
+    --bg-light: #f5f7fa;
+    --bg-dark: #1e1e1e;
+    --text-light: #333;
+    --text-dark: #f5f5f5;
+    --card-light: #ffffff;
+    --card-dark: #2b2b2b;
+  }
+
+  body {
+    font-family: 'Roboto', sans-serif;
+    background: var(--bg-light);
+    color: var(--text-light);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 15px;
+    margin: 0;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  body.dark-mode {
+    background: var(--bg-dark);
+    color: var(--text-dark);
+  }
+
+  h1 {
+    font-size: 2.2em;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+  }
+
+  input, select {
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 2px solid var(--primary-color);
+    font-size: 1em;
+    width: 90%;
+    max-width: 300px;
+    transition: border-color 0.3s, background 0.3s, color 0.3s;
+    background: inherit;
+    color: inherit;
+  }
+
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+  }
+
+  button {
+    padding: 12px 25px;
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: 0.3s;
+  }
+  button:hover {
+    background-color: #09509e;
+  }
+
+  #darkModeToggle {
+    background-color: var(--accent-color);
+  }
+  #darkModeToggle:hover {
+    background-color: #e55a4f;
+  }
+
+  .result-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    width: 100%;
+    max-width: 900px;
+  }
+
+  .card {
+    background: var(--card-light);
+    padding: 20px 15px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s, background 0.3s, color 0.3s;
+    cursor: default;
+  }
+  body.dark-mode .card {
+    background: var(--card-dark);
+    color: var(--text-dark);
+  }
+
+  .card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 20px rgba(0,0,0,0.2);
+  }
+
+  .card h3 {
+    margin: 5px 0;
+    color: var(--primary-color);
+  }
+  .card p {
+    font-size: 1.4em;
+    margin: 0;
+    font-weight: 700;
+  }
+
+  @media (min-width: 600px) {
+    input, select {
+      width: 60%;
     }
-    input, select, button {
-      padding: 10px;
-      margin: 10px;
-      font-size: 16px;
-    }
-    #result {
-      margin-top: 20px;
-      font-size: 18px;
-      font-weight: bold;
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
-  <h1>Ultimate Age Calculator</h1>
-  <label for="dob">Enter your Date of Birth:</label><br>
-  <input type="date" id="dob"><br>
-  
-  <label for="fun">Fun Conversion:</label><br>
+<h1>Professional Age Calculator</h1>
+
+<div class="input-container">
+  <input type="date" id="dob" placeholder="Select your date of birth">
   <select id="fun">
     <option value="human">Human Age</option>
     <option value="dog">Dog Age 🐶</option>
     <option value="cat">Cat Age 🐱</option>
     <option value="plant">Plant Age 🌱</option>
-  </select><br>
+  </select>
+  <button onclick="calculateAge()">Show My Age</button>
+  <button id="darkModeToggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+</div>
 
-  <button onclick="calculateAge()">Calculate Age</button>
+<div class="result-container" id="result"></div>
 
-  <div id="result"></div>
+<script>
+let timer;
 
-  <script>
-    function calculateAge() {
-      const dobInput = document.getElementById('dob').value;
-      if(!dobInput) {
-        alert("Please enter a valid date");
-        return;
-      }
+function toggleDarkMode() {
+  document.body.classList.toggle('dark-mode');
+}
 
-      const dob = new Date(dobInput);
-      const now = new Date();
+function animateValue(element, start, end, duration) {
+  let range = end - start;
+  let current = start;
+  let increment = end > start ? 1 : -1;
+  let stepTime = Math.abs(Math.floor(duration / range));
+  const timer = setInterval(function() {
+      current += increment;
+      element.textContent = current.toLocaleString();
+      if (current == end) clearInterval(timer);
+  }, stepTime);
+}
 
-      if(dob > now) {
-        alert("You are not born yet!");
-        return;
-      }
+function calculateAge() {
+  const dobInput = document.getElementById('dob').value;
+  if (!dobInput) { alert("Please enter a valid date"); return; }
 
-      // Calculate total difference in milliseconds
-      const diffMs = now - dob;
-      
-      // Convert to total seconds, minutes, hours, days, weeks, months, years
-      const totalSeconds = Math.floor(diffMs / 1000);
-      const totalMinutes = Math.floor(totalSeconds / 60);
-      const totalHours = Math.floor(totalMinutes / 60);
-      const totalDays = Math.floor(totalHours / 24);
-      const totalWeeks = Math.floor(totalDays / 7);
-      const years = now.getFullYear() - dob.getFullYear();
-      const months = now.getMonth() - dob.getMonth() + years * 12;
-      
-      // Fun conversions
-      const funOption = document.getElementById('fun').value;
-      let funResult = "";
+  const dob = new Date(dobInput);
+  if (dob > new Date()) { alert("You are not born yet!"); return; }
 
-      if(funOption === "dog") {
-        funResult = `Dog Age: ${(years*7 + (months%12)*0.58).toFixed(1)} years`;
-      } else if(funOption === "cat") {
-        funResult = `Cat Age: ${(years*6 + (months%12)*0.5).toFixed(1)} years`;
-      } else if(funOption === "plant") {
-        funResult = `Plant Age: ${(years*2 + (months%12)*0.17).toFixed(1)} plant years 🌱`;
-      } else {
-        funResult = "Human Age";
-      }
+  if (timer) clearInterval(timer);
 
-      // Display results
-      document.getElementById('result').innerHTML = `
-        ${funResult}<br>
-        Years: ${years}, Months: ${months}, Weeks: ${totalWeeks}, Days: ${totalDays}<br>
-        Hours: ${totalHours}, Minutes: ${totalMinutes}, Seconds: ${totalSeconds}
-      `;
-    }
-  </script>
+  function updateAge() {
+    const now = new Date();
+    const diffMs = now - dob;
+
+    const totalSeconds = Math.floor(diffMs / 1000);
+    const totalMinutes = Math.floor(totalSeconds / 60);
+    const totalHours = Math.floor(totalMinutes / 60);
+    const totalDays = Math.floor(totalHours / 24);
+    const totalWeeks = Math.floor(totalDays / 7);
+    const years = now.getFullYear() - dob.getFullYear();
+    const months = now.getMonth() - dob.getMonth() + years * 12;
+
+    const funOption = document.getElementById('fun').value;
+    let funResult = "";
+    if(funOption === "dog") funResult = `Dog Age: ${(years*7 + (months%12)*0.58).toFixed(1)} yrs 🐶`;
+    else if(funOption === "cat") funResult = `Cat Age: ${(years*6 + (months%12)*0.5).toFixed(1)} yrs 🐱`;
+    else if(funOption === "plant") funResult = `Plant Age: ${(years*2 + (months%12)*0.17).toFixed(1)} yrs 🌱`;
+    else funResult = "Human Age";
+
+    const jupiterYears = (totalDays / 4332.59).toFixed(2);
+    const fantasyAge = (totalDays / 365 * 42).toFixed(0);
+
+    document.getElementById('result').innerHTML = `
+      <div class="card"><h3>${funResult}</h3><p id="funValue">0</p></div>
+      <div class="card"><h3>Years</h3><p id="yearsValue">0</p></div>
+      <div class="card"><h3>Months</h3><p id="monthsValue">0</p></div>
+      <div class="card"><h3>Weeks</h3><p id="weeksValue">0</p></div>
+      <div class="card"><h3>Days</h3><p id="daysValue">0</p></div>
+      <div class="card"><h3>Hours</h3><p id="hoursValue">0</p></div>
+      <div class="card"><h3>Minutes</h3><p id="minutesValue">0</p></div>
+      <div class="card"><h3>Seconds</h3><p id="secondsValue">0</p></div>
+      <div class="card"><h3>Jupiter Years</h3><p id="jupiterValue">0</p></div>
+      <div class="card"><h3>Fantasy Age</h3><p id="fantasyValue">0</p></div>
+    `;
+
+    animateValue(document.getElementById('yearsValue'), 0, years, 500);
+    animateValue(document.getElementById('monthsValue'), 0, months, 500);
+    animateValue(document.getElementById('weeksValue'), 0, totalWeeks, 500);
+    animateValue(document.getElementById('daysValue'), 0, totalDays, 500);
+    animateValue(document.getElementById('hoursValue'), 0, totalHours, 500);
+    animateValue(document.getElementById('minutesValue'), 0, totalMinutes, 500);
+    animateValue(document.getElementById('secondsValue'), 0, totalSeconds, 500);
+    animateValue(document.getElementById('jupiterValue'), 0, jupiterYears, 500);
+    animateValue(document.getElementById('fantasyValue'), 0, fantasyAge, 500);
+  }
+
+  updateAge();
+  timer = setInterval(updateAge, 1000);
+}
+
+document.getElementById('fun').addEventListener('change', () => {
+  if (document.getElementById('dob').value) calculateAge();
+});
+document.getElementById('dob').addEventListener('change', calculateAge);
+</script>
 </body>
 </html>
