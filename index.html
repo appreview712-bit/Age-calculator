@@ -3,193 +3,251 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Age Calculator</title>
 
-<title>Smart Age Calculator – Exact Age in Years, Months & Days</title>
+<!-- SEO -->
+<meta name="description" content="Smart Age Calculator – Calculate your exact age in years, months, days, hours, minutes and seconds. Download your Smart Age ID card instantly.">
 
-<meta name="description" content="Calculate exact age in years, months, days, weeks, hours, minutes and seconds. Download Smart Age ID card instantly.">
-<meta name="keywords" content="age calculator, smart age calculator, date of birth age, age id card">
-
-<!-- SEO Rich Result -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "Smart Age Calculator",
-  "applicationCategory": "UtilityApplication",
-  "operatingSystem": "All",
-  "offers": { "@type": "Offer", "price": "0" }
-}
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-
+<!-- Glass UI Style -->
 <style>
+*{box-sizing:border-box;font-family:Inter,system-ui,Arial}
 body{
-  font-family: Arial, sans-serif;
-  background:#eef2f3;
   margin:0;
-  padding:0;
+  min-height:100vh;
+  background:linear-gradient(135deg,#0f172a,#020617);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:#fff;
 }
 .container{
-  max-width:400px;
-  margin:30px auto;
-  background:#fff;
+  width:100%;
+  max-width:420px;
   padding:20px;
-  border-radius:15px;
-  box-shadow:0 10px 25px rgba(0,0,0,.1);
+}
+.card{
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(14px);
+  border-radius:18px;
+  padding:20px;
+  box-shadow:0 20px 40px rgba(0,0,0,.4);
 }
 h1{
   text-align:center;
-  color:#0a3d62;
+  margin:0 0 12px;
+  font-size:22px;
 }
-input,select,button{
+label{
+  font-size:13px;
+  opacity:.8;
+}
+input,button,select{
   width:100%;
+  margin-top:6px;
   padding:12px;
-  margin:10px 0;
-  font-size:16px;
+  border-radius:10px;
+  border:none;
+  outline:none;
+  font-size:14px;
+}
+input,select{
+  background:rgba(255,255,255,.15);
+  color:#fff;
 }
 button{
-  background:#0a3d62;
-  color:#fff;
-  border:none;
-  border-radius:8px;
+  background:#22c55e;
+  color:#052e16;
+  font-weight:600;
+  cursor:pointer;
 }
-button:hover{opacity:.9}
+button.secondary{
+  background:#38bdf8;
+  color:#042f2e;
+}
 .result{
-  margin-top:15px;
-  font-size:15px;
-  line-height:1.6;
+  margin-top:14px;
+  font-size:14px;
+  line-height:1.5;
 }
-#ageIdCard{
-  margin-top:20px;
-  background:linear-gradient(135deg,#1e90ff,#0066cc);
-  color:#fff;
-  padding:20px;
-  border-radius:20px;
-  text-align:center;
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:12px;
 }
-#ageIdCard img{
-  width:90px;
-  height:90px;
-  border-radius:50%;
-  border:4px solid #fff;
-}
+.actions button{flex:1}
 .privacy{
-  font-size:12px;
-  color:#555;
+  margin-top:14px;
+  font-size:11px;
+  opacity:.65;
   text-align:center;
-  margin-top:15px;
 }
+.site-footer{
+  margin-top:14px;
+  font-size:11px;
+  opacity:.6;
+  text-align:center;
+}
+.site-footer a{color:#fff;text-decoration:none}
+.site-footer a:hover{text-decoration:underline}
+
+/* ID Card */
+#idCard{
+  display:none;
+  margin-top:14px;
+  background:#fff;
+  color:#000;
+  border-radius:14px;
+  padding:14px;
+  text-align:center;
+}
+#idCard img{
+  width:70px;
+  height:70px;
+  border-radius:50%;
+}
+.id-name{font-weight:700;font-size:16px}
+.id-small{font-size:12px;margin-top:4px}
 </style>
+
+<!-- Google Rich Result -->
+<script type="application/ld+json">
+{
+"@context":"https://schema.org",
+"@type":"WebApplication",
+"name":"Smart Age Calculator",
+"applicationCategory":"UtilityApplication",
+"operatingSystem":"All",
+"offers":{"@type":"Offer","price":"0","priceCurrency":"INR"}
+}
+</script>
 </head>
 
 <body>
 <div class="container">
+  <div class="card">
+    <h1>Smart Age Calculator</h1>
 
-<h1>Smart Age Calculator</h1>
+    <label>Date & Time of Birth</label>
+    <input type="datetime-local" id="dob">
 
-<input type="date" id="dob">
-<input type="time" id="time" value="00:00">
+    <button onclick="calculateAge()">Show My Age</button>
 
-<button onclick="calculateAge()">Show My Age</button>
-<button onclick="downloadID()">Download Age ID Card</button>
-<button onclick="shareOnWhatsApp()">Share on WhatsApp</button>
+    <div class="result" id="output"></div>
 
-<div class="result" id="output"></div>
+    <div class="actions">
+      <button class="secondary" onclick="prepareID()">Download ID</button>
+      <button onclick="shareOnWhatsApp()">WhatsApp</button>
+    </div>
 
-<!-- ID CARD -->
-<div id="ageIdCard" style="display:none">
-  <h2>SMART AGE ID</h2>
-  <img id="profileImg" src="alien.png">
-  <p><strong>Name:</strong> <span id="idName"></span></p>
-  <p><strong>Gender:</strong> <span id="idGender"></span></p>
-  <p><strong>DOB:</strong> <span id="idDob"></span></p>
-  <p><strong>Age:</strong> <span id="idAge"></span></p>
-  <p style="font-size:12px">Generated by Smart Age Calculator</p>
-</div>
+    <div id="idCard">
+      <img id="avatar">
+      <div class="id-name" id="idName"></div>
+      <div class="id-small" id="idGender"></div>
+      <div class="id-small" id="idDob"></div>
+      <div class="id-small" id="idAge"></div>
+    </div>
 
-<p class="privacy">
-🔒 We do not collect, store, or share any personal data.  
-All calculations happen only on your device.
-</p>
+    <div class="privacy">
+      🔒 We do not collect or store any data. Everything runs on your device.
+    </div>
 
+    <footer class="site-footer">
+      © <span id="year"></span> Smart Age Calculator · 
+      <a href="#" onclick="openPrivacy()">Privacy & Safety</a>
+    </footer>
+  </div>
 </div>
 
 <script>
-let ageText = "";
+document.getElementById("year").textContent=new Date().getFullYear();
+
+let timer;
 
 function calculateAge(){
-  const dob = document.getElementById("dob").value;
-  const time = document.getElementById("time").value || "00:00";
-  if(!dob){ alert("Please select Date of Birth"); return; }
+  clearInterval(timer);
+  const dob=new Date(document.getElementById("dob").value);
+  if(!dob.getTime()){alert("Please enter date & time");return}
 
-  const birth = new Date(dob+"T"+time);
-  const now = new Date();
+  function update(){
+    const now=new Date();
+    let y=now.getFullYear()-dob.getFullYear();
+    let m=now.getMonth()-dob.getMonth();
+    let d=now.getDate()-dob.getDate();
 
-  let years = now.getFullYear() - birth.getFullYear();
-  let months = now.getMonth() - birth.getMonth();
-  let days = now.getDate() - birth.getDate();
+    if(d<0){
+      m--;
+      d+=new Date(now.getFullYear(),now.getMonth(),0).getDate();
+    }
+    if(m<0){y--;m+=12}
 
-  if(days < 0){
-    months--;
-    days += new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+    const diff=now-dob;
+    const sec=Math.floor(diff/1000);
+    const min=Math.floor(sec/60);
+    const hr=Math.floor(min/60);
+    const days=Math.floor(hr/24);
+    const weeks=Math.floor(days/7);
+
+    window.ageText=
+`Age:
+${y} years ${m} months ${d} days
+or ${weeks} weeks ${days%7} days
+or ${days.toLocaleString()} days
+or ${hr.toLocaleString()} hours
+or ${min.toLocaleString()} minutes
+or ${sec.toLocaleString()} seconds`;
+
+    document.getElementById("output").innerText=window.ageText;
   }
-  if(months < 0){
-    years--;
-    months += 12;
-  }
+  update();
+  timer=setInterval(update,1000);
+}
 
-  const diff = now - birth;
-  const totalDays = Math.floor(diff / (1000*60*60*24));
-  const hours = totalDays * 24;
-  const minutes = hours * 60;
-  const seconds = minutes * 60;
+function prepareID(){
+  if(!window.ageText){alert("Calculate age first");return}
 
-  ageText =
-`${years} years ${months} months ${days} days
-${totalDays} days
-${hours} hours
-${minutes} minutes
-${seconds} seconds`;
+  const name=prompt("Enter name");
+  if(!name)return;
 
-  document.getElementById("output").innerText = ageText;
+  const gender=prompt("Gender: Male / Female / Alien","Male");
+  if(!gender)return;
+
+  const img={
+    male:"male.png",
+    female:"female.png",
+    alien:"alien.png"
+  }[gender.toLowerCase()]||"alien.png";
+
+  document.getElementById("avatar").src=img;
+  document.getElementById("idName").innerText=name;
+  document.getElementById("idGender").innerText="Gender: "+gender;
+  document.getElementById("idDob").innerText="DOB: "+document.getElementById("dob").value;
+  document.getElementById("idAge").innerText=window.ageText.split("\n")[1];
+  document.getElementById("idCard").style.display="block";
+
+  setTimeout(downloadID,300);
 }
 
 function downloadID(){
-  if(!ageText){ alert("Calculate age first"); return; }
-
-  const name = prompt("Enter Name");
-  const gender = prompt("Select Gender: Male / Female / Alien").toLowerCase();
-  if(!name || !gender) return;
-
-  document.getElementById("idName").innerText = name;
-  document.getElementById("idGender").innerText = gender;
-  document.getElementById("idDob").innerText = document.getElementById("dob").value;
-  document.getElementById("idAge").innerText = ageText.split("\n")[0];
-
-  const img = document.getElementById("profileImg");
-  if(gender==="male") img.src="male.png";
-  else if(gender==="female") img.src="female.png";
-  else img.src="alien.png";
-
-  document.getElementById("ageIdCard").style.display="block";
-
-  html2canvas(document.getElementById("ageIdCard"),{scale:2}).then(canvas=>{
-    const link=document.createElement("a");
-    link.download="Smart-Age-ID.png";
-    link.href=canvas.toDataURL();
-    link.click();
+  html2canvas(document.getElementById("idCard")).then(c=>{
+    const a=document.createElement("a");
+    a.download="Smart-Age-ID.png";
+    a.href=c.toDataURL();
+    a.click();
   });
 }
 
 function shareOnWhatsApp(){
-  if(!ageText){ alert("Calculate age first"); return; }
-  const msg =
-"🧮 Smart Age Calculator\n\n"+ageText+
-"\n\nTry it 👉 https://appreview712-bit.github.io/";
-  window.open("https://wa.me/?text="+encodeURIComponent(msg));
+  if(!window.ageText){alert("Calculate age first");return}
+  const txt="🧮 Smart Age Calculator\n\n"+window.ageText+"\n\nTry it 👉 "+location.href;
+  window.open("https://wa.me/?text="+encodeURIComponent(txt));
+}
+
+function openPrivacy(){
+  alert("No data collected.\nNo storage.\nNo tracking.\n100% client-side.");
 }
 </script>
 
+<!-- html2canvas -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </body>
 </html>
