@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -159,7 +159,7 @@ body.dark-mode .card { background: var(--card-dark); }
 <h1>Smart Age Calculator</h1>
 
 <div class="input-card">
-  <input type="date" id="dob" placeholder="Select your date of birth">
+  <input type="datetime-local" id="dob" placeholder="Select your date and time of birth">
   <select id="fun">
     <option value="human">Human Age</option>
     <option value="dog">Dog Age 🐶</option>
@@ -178,68 +178,58 @@ body.dark-mode .card { background: var(--card-dark); }
 let timer;
 function toggleDarkMode(){document.body.classList.toggle('dark-mode');}
 
-function animateValue(element,start,end,duration){
-  let range=end-start,current=start,increment=end>start?1:-1;
-  let stepTime=Math.abs(Math.floor(duration/range));
-  const timer=setInterval(function(){current+=increment;element.textContent=current.toLocaleString();if(current==end)clearInterval(timer);},stepTime);
-}
-
-function calculateAge(){
-  const dobInput=document.getElementById('dob').value;
-  if(!dobInput){alert("Please enter a valid date");return;}
-  const dob=new Date(dobInput);
-  if(dob>new Date()){alert("You are not born yet!");return;}
+function calculateAge() {
+  const dobInput = document.getElementById('dob').value;
+  if (!dobInput) { alert("Enter date and time"); return; }
+  const dob = new Date(dobInput);
+  if (dob > new Date()) { alert("You are not born yet!"); return; }
   if(timer) clearInterval(timer);
 
-  function updateAge(){
-    const now=new Date(), diffMs=now-dob;
-    const totalSeconds=Math.floor(diffMs/1000);
-    const totalMinutes=Math.floor(totalSeconds/60);
-    const totalHours=Math.floor(totalMinutes/60);
-    const totalDays=Math.floor(totalHours/24);
-    const totalWeeks=Math.floor(totalDays/7);
-    const years=now.getFullYear()-dob.getFullYear();
-    const months=now.getMonth()-dob.getMonth()+years*12;
+  function updateAge() {
+    const now = new Date();
+    const diffMs = now - dob;
 
-    const funOption=document.getElementById('fun').value;
+    const totalSeconds = Math.floor(diffMs / 1000);
+    const totalMinutes = Math.floor(diffMs / 60 / 1000);
+    const totalHours = Math.floor(totalMinutes / 60);
+    const totalDays = Math.floor(totalHours / 24);
+    const totalWeeks = Math.floor(totalDays / 7);
+
+    let years = now.getFullYear() - dob.getFullYear();
+    let months = now.getMonth() - dob.getMonth() + years*12;
+    if (now.getDate() < dob.getDate()) { months--; years--; }
+
+    const funOption = document.getElementById('fun').value;
     let funResult="";
-    if(funOption==="dog") funResult=`Dog Age: ${(years*7 + (months%12)*0.58).toFixed(1)} yrs 🐶`;
-    else if(funOption==="cat") funResult=`Cat Age: ${(years*6 + (months%12)*0.5).toFixed(1)} yrs 🐱`;
-    else if(funOption==="plant") funResult=`Plant Age: ${(years*2 + (months%12)*0.17).toFixed(1)} yrs 🌱`;
-    else funResult="Human Age";
+    if(funOption==="dog") funResult=`${(years*7 + (months%12)*0.58).toFixed(1)} yrs 🐶`;
+    else if(funOption==="cat") funResult=`${(years*6 + (months%12)*0.5).toFixed(1)} yrs 🐱`;
+    else if(funOption==="plant") funResult=`${(years*2 + (months%12)*0.17).toFixed(1)} yrs 🌱`;
+    else funResult=`${years} yrs`;
 
     const jupiterYears=(totalDays/4332.59).toFixed(2);
     const fantasyAge=(totalDays/365*42).toFixed(0);
 
     document.getElementById('result').innerHTML=`
-      <div class="card"><h3>${funResult}</h3><p id="funValue">0</p></div>
-      <div class="card"><h3>Years</h3><p id="yearsValue">0</p></div>
-      <div class="card"><h3>Months</h3><p id="monthsValue">0</p></div>
-      <div class="card"><h3>Weeks</h3><p id="weeksValue">0</p></div>
-      <div class="card"><h3>Days</h3><p id="daysValue">0</p></div>
-      <div class="card"><h3>Hours</h3><p id="hoursValue">0</p></div>
-      <div class="card"><h3>Minutes</h3><p id="minutesValue">0</p></div>
-      <div class="card"><h3>Seconds</h3><p id="secondsValue">0</p></div>
-      <div class="card"><h3>Jupiter Years</h3><p id="jupiterValue">0</p></div>
-      <div class="card"><h3>Fantasy Age</h3><p id="fantasyValue">0</p></div>
+      <div class="card"><h3>Fun Age</h3><p>${funResult}</p></div>
+      <div class="card"><h3>Years</h3><p>${years}</p></div>
+      <div class="card"><h3>Months</h3><p>${months}</p></div>
+      <div class="card"><h3>Weeks</h3><p>${totalWeeks}</p></div>
+      <div class="card"><h3>Days</h3><p>${totalDays}</p></div>
+      <div class="card"><h3>Hours</h3><p>${totalHours}</p></div>
+      <div class="card"><h3>Minutes</h3><p>${totalMinutes}</p></div>
+      <div class="card"><h3>Seconds</h3><p>${totalSeconds}</p></div>
+      <div class="card"><h3>Jupiter Years</h3><p>${jupiterYears}</p></div>
+      <div class="card"><h3>Fantasy Age</h3><p>${fantasyAge}</p></div>
     `;
-    animateValue(document.getElementById('yearsValue'),0,years,500);
-    animateValue(document.getElementById('monthsValue'),0,months,500);
-    animateValue(document.getElementById('weeksValue'),0,totalWeeks,500);
-    animateValue(document.getElementById('daysValue'),0,totalDays,500);
-    animateValue(document.getElementById('hoursValue'),0,totalHours,500);
-    animateValue(document.getElementById('minutesValue'),0,totalMinutes,500);
-    animateValue(document.getElementById('secondsValue'),0,totalSeconds,500);
-    animateValue(document.getElementById('jupiterValue'),0,jupiterYears,500);
-    animateValue(document.getElementById('fantasyValue'),0,fantasyAge,500);
   }
 
   updateAge();
   timer=setInterval(updateAge,1000);
 }
 
-document.getElementById('fun').addEventListener('change',()=>{if(document.getElementById('dob').value) calculateAge();});
-document.getElementById('dob').addEventListener('change',calculateAge);
+document.getElementById('dob').addEventListener('change', calculateAge);
+document.getElementById('fun').addEventListener('change', calculateAge);
 </script>
+
 </body>
 </html>
