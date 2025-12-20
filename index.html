@@ -3,40 +3,91 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Age Calculator</title>
+  <title>Ultimate Age Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+      background: #f0f8ff;
+    }
+    input, select, button {
+      padding: 10px;
+      margin: 10px;
+      font-size: 16px;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-  <h1>Age Calculator</h1>
-  <label for="dob">Enter your Date of Birth:</label>
-  <input type="date" id="dob">
+  <h1>Ultimate Age Calculator</h1>
+  <label for="dob">Enter your Date of Birth:</label><br>
+  <input type="date" id="dob"><br>
+  
+  <label for="fun">Fun Conversion:</label><br>
+  <select id="fun">
+    <option value="human">Human Age</option>
+    <option value="dog">Dog Age 🐶</option>
+    <option value="cat">Cat Age 🐱</option>
+    <option value="plant">Plant Age 🌱</option>
+  </select><br>
+
   <button onclick="calculateAge()">Calculate Age</button>
-  <p id="result"></p>
+
+  <div id="result"></div>
 
   <script>
     function calculateAge() {
-      const dob = new Date(document.getElementById('dob').value);
-      if (!dob.getTime()) {
-        alert('Please enter a valid date');
+      const dobInput = document.getElementById('dob').value;
+      if(!dobInput) {
+        alert("Please enter a valid date");
         return;
       }
 
-      const today = new Date();
-      let years = today.getFullYear() - dob.getFullYear();
-      let months = today.getMonth() - dob.getMonth();
-      let days = today.getDate() - dob.getDate();
+      const dob = new Date(dobInput);
+      const now = new Date();
 
-      if (days < 0) {
-        months -= 1;
-        days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+      if(dob > now) {
+        alert("You are not born yet!");
+        return;
       }
 
-      if (months < 0) {
-        years -= 1;
-        months += 12;
+      // Calculate total difference in milliseconds
+      const diffMs = now - dob;
+      
+      // Convert to total seconds, minutes, hours, days, weeks, months, years
+      const totalSeconds = Math.floor(diffMs / 1000);
+      const totalMinutes = Math.floor(totalSeconds / 60);
+      const totalHours = Math.floor(totalMinutes / 60);
+      const totalDays = Math.floor(totalHours / 24);
+      const totalWeeks = Math.floor(totalDays / 7);
+      const years = now.getFullYear() - dob.getFullYear();
+      const months = now.getMonth() - dob.getMonth() + years * 12;
+      
+      // Fun conversions
+      const funOption = document.getElementById('fun').value;
+      let funResult = "";
+
+      if(funOption === "dog") {
+        funResult = `Dog Age: ${(years*7 + (months%12)*0.58).toFixed(1)} years`;
+      } else if(funOption === "cat") {
+        funResult = `Cat Age: ${(years*6 + (months%12)*0.5).toFixed(1)} years`;
+      } else if(funOption === "plant") {
+        funResult = `Plant Age: ${(years*2 + (months%12)*0.17).toFixed(1)} plant years 🌱`;
+      } else {
+        funResult = "Human Age";
       }
 
-      document.getElementById('result').textContent =
-        `You are ${years} years, ${months} months, and ${days} days old.`;
+      // Display results
+      document.getElementById('result').innerHTML = `
+        ${funResult}<br>
+        Years: ${years}, Months: ${months}, Weeks: ${totalWeeks}, Days: ${totalDays}<br>
+        Hours: ${totalHours}, Minutes: ${totalMinutes}, Seconds: ${totalSeconds}
+      `;
     }
   </script>
 </body>
