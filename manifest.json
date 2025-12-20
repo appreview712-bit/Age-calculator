@@ -1,9 +1,9 @@
 {
-  "name": "Professional Age Calculator",
+  "name": "Smart Age Calculator",
   "short_name": "AgeCalc",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f5f7fa",
+  "background_color": "#c3ecf9",
   "theme_color": "#0a3d62",
   "icons": [
     {
