@@ -1,233 +1,260 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Smart Age Calculator</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Poppins:wght@600&display=swap" rel="stylesheet">
-<link rel="icon" href="favicon.png" type="image/png">
+<link rel="icon" href="favicon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4b2fa3">
 
-<!-- html2canvas for downloading ID card -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
 body{
-  font-family:'Roboto', sans-serif;
+  font-family:Arial,sans-serif;
   background:#eef2f3;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  padding:50px 15px;
+  padding:30px;
+  text-align:center;
 }
-
-h1{
-  font-family:'Poppins', sans-serif;
-  font-size:2.5em;
-  margin-bottom:20px;
-  color:#0a3d62;
-}
-
-.input-card{
-  background:#fff;
-  padding:25px 30px;
-  border-radius:20px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.1);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:15px;
-  width:100%;
-  max-width:400px;
-}
-
-input, select{
-  padding:12px 15px;
-  border-radius:10px;
-  border:2px solid #0a3d62;
-  font-size:1em;
-  width:100%;
-}
-
-button{
-  padding:10px 20px;
-  border:none;
-  border-radius:15px;
-  background:#0a3d62;
-  color:white;
-  cursor:pointer;
-  font-weight:700;
-}
-
-button:hover{ background:#09509e; }
-
-#result{
-  margin-top:30px;
+.container{
+  max-width:500px;
+  margin:auto;
   background:#fff;
   padding:25px;
-  border-radius:20px;
-  max-width:600px;
+  border-radius:15px;
+  box-shadow:0 8px 20px rgba(0,0,0,.1);
+}
+h1{color:#0a3d62;}
+input,select,button{
+  padding:10px;
   width:100%;
-  box-shadow:0 8px 20px rgba(0,0,0,0.1);
-  font-size:1.2em;
-  line-height:1.8em;
+  margin-top:10px;
+  font-size:16px;
+}
+button{
+  background:#0a3d62;
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+}
+button:hover{background:#09509e;}
+#result{
+  margin-top:20px;
+  white-space:pre-line;
   color:#0a3d62;
-  white-space:pre-wrap;
-  text-align:center;
+  font-weight:bold;
 }
 
-/* ID Card style */
+/* Modal */
+.modal{
+  display:none;
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:rgba(0,0,0,.5);
+}
+.modal-content{
+  background:#fff;
+  padding:20px;
+  max-width:350px;
+  margin:100px auto;
+  border-radius:15px;
+}
+
+/* ID Card */
 #idCard{
   display:none;
-  width:400px;
-  max-width:90%;
-  padding:30px;
-  border-radius:20px;
-  background:linear-gradient(135deg,#0a3d62,#09509e);
-  color:white;
-  text-align:center;
-  font-family:'Poppins',sans-serif;
-  line-height:1.8em;
+  width:720px;
+  background:#fff;
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 12px 30px rgba(0,0,0,.25);
+  font-family:Arial;
+  position:relative;
 }
-
-#idCard h2{ margin-bottom:15px; }
-#idCard p{ margin:3px 0; font-size:1.1em; font-weight:600; }
-
-#profileContainer{
+.card-header{
+  background:linear-gradient(135deg,#4b2fa3,#6a5acd);
+  color:#fff;
+  padding:18px;
+  font-size:22px;
+  font-weight:bold;
+}
+.card-body{
   display:flex;
-  align-items:center;
-  gap:15px;
-  margin-bottom:15px;
+  gap:25px;
+  padding:25px;
 }
-
-#profilePic{
-  width:80px;
-  height:80px;
-  border-radius:50%;
-  background:white;
+.card-body img{
+  width:140px;
+  height:160px;
+  border-radius:12px;
+  border:3px solid #eee;
+}
+.age-box{
+  background:#f4f6fb;
+  padding:10px;
+  border-radius:10px;
+  margin-top:10px;
+  font-size:13px;
+}
+.watermark{
+  position:absolute;
+  bottom:10px;
+  right:15px;
+  font-size:36px;
+  color:rgba(0,0,0,0.05);
+  font-weight:bold;
 }
 </style>
 </head>
+
 <body>
 
-<h1>Smart Age Calculator</h1>
+<div class="container">
 
-<div class="input-card">
-  <input type="text" id="userName" placeholder="Enter your name">
-  <select id="gender">
-    <option value="male">Male</option>
-    <option value="female">Female</option>
-  </select>
-  <input type="datetime-local" id="dob" placeholder="Select your birth date and time">
-  <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
-    <button onclick="calculateAge()">Show My Age</button>
-    <button onclick="downloadIDCard()">Download Age ID Card</button>
+<select id="language" onchange="changeLanguage()">
+  <option value="en">English</option>
+  <option value="ta">தமிழ்</option>
+  <option value="hi">हिंदी</option>
+</select>
+
+<h1 id="title">Smart Age Calculator</h1>
+
+<input type="datetime-local" id="dob">
+<button id="showAgeBtn" onclick="calculateAge()">Show My Age</button>
+<button id="downloadBtn" onclick="openModal()">Download Age ID Card</button>
+<button id="installBtn" style="display:none;">Install App</button>
+
+<div id="result"></div>
+</div>
+
+<!-- Modal -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <h3>ID Card Details</h3>
+    <input type="text" id="name" placeholder="Enter Name">
+    <select id="gender">
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+    </select>
+    <button onclick="downloadID()">Generate & Download</button>
   </div>
 </div>
 
-<div id="result"></div>
-
-<!-- Hidden ID Card -->
+<!-- ID Card -->
 <div id="idCard">
-  <div id="profileContainer">
-    <img id="profilePic" src="">
+  <div class="card-header">SMART AGE ID CARD</div>
+  <div class="card-body">
+    <img id="photo">
     <div>
-      <h2 id="cardName">Your Name</h2>
-      <p id="cardGender">Gender</p>
+      <h2 id="cardName"></h2>
+      <p><b id="genderLbl">Gender</b>: <span id="cardGender"></span></p>
+      <p><b id="dobLbl">DOB</b>: <span id="cardDob"></span></p>
+      <p><b>Card No</b>: <span id="cardNo"></span></p>
+      <p><b id="issuedLbl">Issued</b>: <span id="issuedDate"></span></p>
+      <div class="age-box">
+        <b id="ageLbl">Age Details</b>
+        <div id="cardAge"></div>
+      </div>
     </div>
   </div>
-  <hr style="margin:10px 0;border:1px solid rgba(255,255,255,0.3);">
-  <p id="cardAge"></p>
-  <p id="cardMonths"></p>
-  <p id="cardWeeks"></p>
-  <p id="cardDays"></p>
-  <p id="cardHours"></p>
-  <p id="cardMinutes"></p>
-  <p id="cardSeconds"></p>
+  <div class="watermark">SMART AGE</div>
 </div>
 
 <script>
-let years, months, days, totalMonths, totalDays, totalWeeks, totalHours, totalMinutes, totalSeconds;
-
+let ageText="";
 function calculateAge(){
-  const dobInput = document.getElementById('dob').value;
-  if(!dobInput){ alert("Please enter your date of birth!"); return; }
+  const dob=new Date(document.getElementById("dob").value);
+  const now=new Date();
+  if(!dob||dob>now){alert("Enter valid DOB");return;}
 
-  const dob = new Date(dobInput);
-  const now = new Date();
-  if(dob>now){ alert("You are not born yet!"); return; }
+  let y=now.getFullYear()-dob.getFullYear();
+  let m=now.getMonth()-dob.getMonth();
+  let d=now.getDate()-dob.getDate();
 
-  const diffMs = now - dob;
+  if(d<0){m--;d+=new Date(now.getFullYear(),now.getMonth(),0).getDate();}
+  if(m<0){y--;m+=12;}
 
-  totalSeconds = Math.floor(diffMs/1000);
-  totalMinutes = Math.floor(totalSeconds/60);
-  totalHours = Math.floor(totalMinutes/60);
-  totalDays = Math.floor(totalHours/24);
-  totalWeeks = Math.floor(totalDays/7);
+  const diff=now-dob;
+  const days=Math.floor(diff/86400000);
+  const hours=days*24;
+  const minutes=hours*60;
+  const seconds=minutes*60;
 
-  years = now.getFullYear() - dob.getFullYear();
-  months = now.getMonth() - dob.getMonth();
-  days = now.getDate() - dob.getDate();
+  ageText=`${y} years ${m} months ${d} days
+or ${days.toLocaleString()} days
+or ${hours.toLocaleString()} hours
+or ${minutes.toLocaleString()} minutes
+or ${seconds.toLocaleString()} seconds`;
 
-  if(days<0){
-    const lastMonth = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
-    days += lastMonth;
-    months--;
-  }
-
-  if(months<0){
-    months += 12;
-    years--;
-  }
-
-  totalMonths = years*12 + months;
-
-  // Display age result
-  document.getElementById('result').innerText = 
-`${years} years ${months} months ${days} days
-or ${totalMonths} months ${days} days
-or ${totalWeeks} weeks ${totalDays % 7} days
-or ${totalDays.toLocaleString()} days
-or ${totalHours.toLocaleString()} hours
-or ${totalMinutes.toLocaleString()} minutes
-or ${totalSeconds.toLocaleString()} seconds`;
-
-  // Name and gender
-  const name = document.getElementById('userName').value || "Your Name";
-  const gender = document.getElementById('gender').value;
-  document.getElementById('cardName').innerText = name;
-  document.getElementById('cardGender').innerText = gender.charAt(0).toUpperCase() + gender.slice(1);
-
-  // Profile picture
-  const profilePic = document.getElementById('profilePic');
-  if(gender==="male"){
-    profilePic.src="male_icon.png";
-  } else {
-    profilePic.src="female_icon.png";
-  }
-
-  // Update ID card age details
-  document.getElementById('cardAge').innerText = `${years} years ${months} months ${days} days`;
-  document.getElementById('cardMonths').innerText = `or ${totalMonths} months ${days} days`;
-  document.getElementById('cardWeeks').innerText = `or ${totalWeeks} weeks ${totalDays % 7} days`;
-  document.getElementById('cardDays').innerText = `or ${totalDays.toLocaleString()} days`;
-  document.getElementById('cardHours').innerText = `or ${totalHours.toLocaleString()} hours`;
-  document.getElementById('cardMinutes').innerText = `or ${totalMinutes.toLocaleString()} minutes`;
-  document.getElementById('cardSeconds').innerText = `or ${totalSeconds.toLocaleString()} seconds`;
+  document.getElementById("result").innerText=ageText;
 }
 
-function downloadIDCard(){
-  const card = document.getElementById('idCard');
-  card.style.display='block';
-  html2canvas(card).then(canvas=>{
-    const link = document.createElement('a');
-    link.download = 'Age_ID_Card.png';
-    link.href = canvas.toDataURL();
-    link.click();
-    card.style.display='none';
+function openModal(){
+  if(!ageText){alert("Calculate age first");return;}
+  document.getElementById("modal").style.display="block";
+}
+
+function downloadID(){
+  const name=document.getElementById("name").value||"User";
+  const gender=document.getElementById("gender").value;
+
+  document.getElementById("cardName").innerText=name;
+  document.getElementById("cardGender").innerText=gender.toUpperCase();
+  document.getElementById("cardDob").innerText=
+    new Date(document.getElementById("dob").value).toLocaleDateString();
+  document.getElementById("cardNo").innerText="AGE-"+Math.floor(100000+Math.random()*900000);
+  document.getElementById("issuedDate").innerText=new Date().toLocaleDateString();
+  document.getElementById("cardAge").innerText=ageText;
+  document.getElementById("photo").src=
+    gender==="male"?"male_icon.png":"female_icon.png";
+
+  document.getElementById("modal").style.display="none";
+  document.getElementById("idCard").style.display="block";
+
+  html2canvas(document.getElementById("idCard")).then(c=>{
+    const a=document.createElement("a");
+    a.href=c.toDataURL();
+    a.download="Age_ID_Card.png";
+    a.click();
+    document.getElementById("idCard").style.display="none";
   });
+}
+
+/* Language */
+const t={
+ en:{title:"Smart Age Calculator",show:"Show My Age",down:"Download Age ID Card",inst:"Install App",age:"Age Details",gender:"Gender",dob:"DOB",issued:"Issued"},
+ ta:{title:"வயது கணிப்பான்",show:"என் வயதை காண்பி",down:"வயது அடையாள அட்டை",inst:"ஆப்பை நிறுவு",age:"வயது விவரம்",gender:"பாலினம்",dob:"பிறந்த தேதி",issued:"வெளியீடு"},
+ hi:{title:"आयु कैलकुलेटर",show:"मेरी आयु दिखाएं",down:"आयु पहचान पत्र",inst:"ऐप इंस्टॉल करें",age:"आयु विवरण",gender:"लिंग",dob:"जन्म तिथि",issued:"जारी"}
+};
+function changeLanguage(){
+ const l=document.getElementById("language").value;
+ document.getElementById("title").innerText=t[l].title;
+ document.getElementById("showAgeBtn").innerText=t[l].show;
+ document.getElementById("downloadBtn").innerText=t[l].down;
+ document.getElementById("installBtn").innerText=t[l].inst;
+ document.getElementById("ageLbl").innerText=t[l].age;
+ document.getElementById("genderLbl").innerText=t[l].gender;
+ document.getElementById("dobLbl").innerText=t[l].dob;
+ document.getElementById("issuedLbl").innerText=t[l].issued;
+}
+
+/* PWA */
+let deferredPrompt;
+window.addEventListener("beforeinstallprompt",e=>{
+ e.preventDefault();deferredPrompt=e;
+ document.getElementById("installBtn").style.display="block";
+});
+document.getElementById("installBtn").onclick=()=>{
+ deferredPrompt.prompt();
+};
+if("serviceWorker"in navigator){
+ navigator.serviceWorker.register("service-worker.js");
 }
 </script>
 
 </body>
-</html>
+</
