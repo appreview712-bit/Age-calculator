@@ -4,13 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Smart Age Calculator – Exact Age in Years, Months, Days & Seconds</title>
+<title>Smart Age Calculator – Exact Age in Years, Months, Days & Seconds Online</title>
 
 <!-- SEO Meta Tags -->
-<meta name="description" content="Smart Age Calculator – Calculate your exact age in years, months, days, hours, minutes and seconds. Download age ID card and share on WhatsApp instantly.">
-<meta name="keywords" content="age calculator, calculate age, date of birth calculator, exact age calculator, age in seconds, age in days, DOB calculator, smart age calculator">
+<meta name="description" content="Calculate your exact age in years, months, days, hours, minutes and seconds. Download Age ID card and share on WhatsApp instantly.">
+<meta name="keywords" content="age calculator, calculate age, date of birth calculator, exact age calculator, age in seconds, age in days, DOB calculator, smart age calculator, online age calculator">
 <meta name="author" content="Smart Age Calculator">
 <meta name="robots" content="index, follow">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://appreview712-bit.github.io/Age-calculator/">
 
 <!-- Open Graph (Google, WhatsApp) -->
 <meta property="og:title" content="Smart Age Calculator – Exact Age in Seconds">
@@ -19,14 +22,31 @@
 <meta property="og:url" content="https://appreview712-bit.github.io/Age-calculator/">
 <meta property="og:image" content="https://appreview712-bit.github.io/Age-calculator/icon-512.png">
 
-<!-- Twitter -->
+<!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
+
+<!-- Structured Data for Rich Snippet -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Smart Age Calculator",
+  "url": "https://appreview712-bit.github.io/Age-calculator/",
+  "description": "Calculate your exact age in years, months, days, hours, minutes, and seconds. Download Age ID Card and share on WhatsApp.",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "All",
+  "creator": {
+    "@type": "Organization",
+    "name": "Smart Age Calculator"
+  }
+}
+</script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
-/* your existing CSS only — no HTML tags here */
-  body {
+*{box-sizing:border-box;font-family:Inter,Arial,sans-serif;margin:0;padding:0;}
+body{
   min-height:100vh;
   display:flex;
   justify-content:center;
@@ -39,25 +59,60 @@
   max-width:420px;
   padding:25px;
   border-radius:20px;
+  background:rgba(255,255,255,0.12);
+  backdrop-filter:blur(18px);
+  box-shadow:0 0 40px rgba(99,102,241,0.2);
 }
+h1{text-align:center;font-size:28px;margin-bottom:10px;}
+h1 span{color:#22c55e;}
+.subtitle{text-align:center;font-size:14px;margin-bottom:20px;color:#d1d5db;}
+h2{font-size:16px; margin:12px 0; text-align:center; color:#e5e7eb;}
+h3{font-size:14px; text-align:center; margin:6px 0;}
+p{font-size:13px; color:#d1d5db; text-align:center; margin-bottom:15px;}
+label{font-size:13px;}
+input, select{width:100%;padding:10px;margin:6px 0 12px;border-radius:10px;border:none;background:rgba(255,255,255,0.18);color:#fff;}
+button{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:600;
+  margin-top:8px;
+  transition:0.2s;
+}
+button.primary{background:linear-gradient(135deg,#22c55e,#4ade80);}
+button.primary:hover{box-shadow:0 0 15px #22c55e,0 0 30px #4ade80;transform:translateY(-2px);}
+button.secondary{background:linear-gradient(135deg,#38bdf8,#60a5fa);}
+button.secondary:hover{box-shadow:0 0 15px #38bdf8,0 0 30px #60a5fa;transform:translateY(-2px);}
+.result{margin-top:15px;line-height:1.5;font-size:14px;}
+.trust{margin-top:20px;font-size:12px;background:#0f172a1a;padding:10px;border-radius:10px;text-align:center;color:#fff;}
+#genderOptions{display:flex;justify-content:space-around;margin:6px 0 12px;}
+#genderOptions button{width:30%;}
+.id-card{
+  width:260px;
+  padding:20px;
+  border-radius:18px;
+  text-align:center;
+  margin:15px auto;
+  background:linear-gradient(135deg,#22c55e,#4ade80);
+  color:#fff;
+  box-shadow:0 0 20px #22c55e,0 0 40px #4ade80;
+  display:none;
+}
+.profile{width:90px;height:90px;border-radius:50%;margin:10px auto;border:2px solid #fff;}
+.id-header{font-weight:700;margin-bottom:10px;letter-spacing:1px;}
+.site-footer{text-align:center;font-size:11px;margin-top:10px;opacity:0.7;}
 </style>
 </head>
 
 <body>
 <div class="container">
   <h1>Smart <span>Age</span> Calculator</h1>
-  <h2 style="display:none;">
-Online Age Calculator – Calculate Exact Age from Date of Birth
-  </h2>
   <div class="subtitle">Accurate age down to the second</div>
-<h2 style="font-size:16px; margin:12px 0; text-align:center; color:#e5e7eb;">
-Free Online Age Calculator Tool
-</h2>
+  <h2>Free Online Age Calculator Tool</h2>
+  <p>Calculate your exact age from your date of birth in years, months, days, hours, minutes and seconds. Download your Age ID Card and share it instantly on WhatsApp.</p>
 
-<p style="font-size:13px; color:#d1d5db; text-align:center; margin-bottom:15px;">
-Calculate your exact age from your date of birth in years, months, days, hours,
-minutes and seconds. Download your Age ID Card and share it instantly on WhatsApp.
-</p>
   <label>Date of Birth</label>
   <input type="date" id="dob">
   <label>Time of Birth</label>
@@ -83,7 +138,7 @@ minutes and seconds. Download your Age ID Card and share it instantly on WhatsAp
 
   <div class="id-card" id="idCard">
     <div class="id-header">SMART AGE ID</div>
-    <img id="profilePic" class="profile" src="">
+    <img id="profilePic" class="profile" src="" alt="Profile Icon">
     <h3 id="cardName">Name</h3>
     <p id="cardAge">Age</p>
     <p id="cardDob">DOB</p>
@@ -96,7 +151,6 @@ minutes and seconds. Download your Age ID Card and share it instantly on WhatsAp
 <script>
 let selectedGender="Male";
 let ageText="";
-
 document.getElementById("year").innerText=new Date().getFullYear();
 
 function selectGender(g){selectedGender=g;}
@@ -138,34 +192,34 @@ or ${totalSeconds.toLocaleString()} seconds`;
 }
 
 function downloadIDCard(){
-  if(!document.getElementById("dob").value){alert("Enter DOB first");return;}
-  const name=prompt("Enter Name for ID Card");
-  if(!name) return;
+if(!document.getElementById("dob").value){alert("Enter DOB first");return;}
+const name=prompt("Enter Name for ID Card");
+if(!name) return;
 
-  document.getElementById("cardName").innerText=name;
-  document.getElementById("cardDob").innerText="DOB: "+document.getElementById("dob").value;
-  document.getElementById("cardAge").innerText=ageText.split("\n")[0];
+document.getElementById("cardName").innerText=name;
+document.getElementById("cardDob").innerText="DOB: "+document.getElementById("dob").value;
+document.getElementById("cardAge").innerText=ageText.split("\n")[0];
 
-  let pic="";
-  if(selectedGender==="Male") pic="male_icon.png";
-  else if(selectedGender==="Female") pic="female_icon.png";
-  else pic="alien_icon.png";
+let pic="";
+if(selectedGender==="Male") pic="male_icon.png";
+else if(selectedGender==="Female") pic="female_icon.png";
+else pic="alien_icon.png";
 
-  document.getElementById("profilePic").src=pic;
-  document.getElementById("idCard").style.display="block";
+document.getElementById("profilePic").src=pic;
+document.getElementById("idCard").style.display="block";
 
-  html2canvas(document.getElementById("idCard")).then(canvas=>{
-    const link=document.createElement("a");
-    link.download="Age_ID_Card.png";
-    link.href=canvas.toDataURL();
-    link.click();
-  });
+html2canvas(document.getElementById("idCard")).then(canvas=>{
+const link=document.createElement("a");
+link.download="Age_ID_Card.png";
+link.href=canvas.toDataURL();
+link.click();
+});
 }
 
 function shareWhatsApp(){
-  if(!ageText){alert("Calculate age first");return;}
-  const txt="🧮 Smart Age Calculator\n\n"+ageText+"\n\nTry it 👉 "+location.href;
-  window.open("https://wa.me/?text="+encodeURIComponent(txt));
+if(!ageText){alert("Calculate age first");return;}
+const txt="🧮 Smart Age Calculator\n\n"+ageText+"\n\nTry it 👉 "+location.href;
+window.open("https://wa.me/?text="+encodeURIComponent(txt));
 }
 </script>
 </body>
